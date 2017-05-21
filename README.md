@@ -68,6 +68,23 @@ webInput/
 ]
 ```
 
+- Set the configuration file timmyConfig.json in the webInput directory:
+
+```json
+{
+    "title": "Web example",
+    "author": "arnaucode",
+    "github": "github.com/arnaucode",
+    "website": "arnaucode.com",
+    "files": [
+        "index.html",
+        "projects.html",
+        "app.css"
+    ]
+}
+```
+
+
 - Execute Timmy
 
 ```
