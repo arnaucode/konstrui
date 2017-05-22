@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 )
 
-//TimmyConfig is the configuration from the file timmyConfig.json, on the folder /webInput
-type TimmyConfig struct {
+//KonstruiConfig is the configuration from the file konstruiConfig.json, on the folder /webInput
+type KonstruiConfig struct {
 	Title   string   `json:"title"`
 	Author  string   `json:"author"`
 	Github  string   `json:"github"`
@@ -15,13 +15,13 @@ type TimmyConfig struct {
 	Files   []string `json:"files"`
 }
 
-var timmyConfig TimmyConfig
+var konstruiConfig KonstruiConfig
 
-func readTimmyConfig(path string) {
+func readKonstruiConfig(path string) {
 	file, e := ioutil.ReadFile(path)
 	if e != nil {
 		fmt.Println("error:", e)
 	}
 	content := string(file)
-	json.Unmarshal([]byte(content), &timmyConfig)
+	json.Unmarshal([]byte(content), &konstruiConfig)
 }

@@ -9,7 +9,7 @@ import (
 
 const rawFolderPath = "./webInput"
 const newFolderPath = "./webOutput"
-const timmyConfigFile = "timmyConfig.json"
+const konstruiConfigFile = "konstruiConfig.json"
 
 func parseDir(folderPath string, newDir string) {
 	files, _ := ioutil.ReadDir(folderPath)
@@ -34,8 +34,8 @@ func parseDir(folderPath string, newDir string) {
 	}
 }
 func startTemplating(folderPath string, newDir string) {
-	for i := 0; i < len(timmyConfig.Files); i++ {
-		fName := timmyConfig.Files[i]
+	for i := 0; i < len(konstruiConfig.Files); i++ {
+		fName := konstruiConfig.Files[i]
 		fileNameSplitted := strings.Split(fName, ".")
 		extension := fileNameSplitted[len(fileNameSplitted)-1]
 		if extension == "html" {
@@ -49,10 +49,10 @@ func startTemplating(folderPath string, newDir string) {
 }
 func main() {
 	c.Green("getting files from /webInput")
-	c.Green("getting conifg from file timmyConfig.json")
-	readTimmyConfig(rawFolderPath + "/" + timmyConfigFile)
+	c.Green("getting conifg from file konstruiConfig.json")
+	readKonstruiConfig(rawFolderPath + "/" + konstruiConfigFile)
 	c.Green("configuration:")
-	fmt.Println(timmyConfig.Files)
+	fmt.Println(konstruiConfig.Files)
 	c.Green("templating")
 	//parseDir(rawFolderPath, newFolderPath)
 	startTemplating(rawFolderPath, newFolderPath)

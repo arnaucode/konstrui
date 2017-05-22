@@ -59,8 +59,8 @@ func generateFromTemplateAndData(templateContent string, entries []dataEntry) st
 func getTemplateParameters(line string) (string, string) {
 	var templatePath string
 	var data string
-	line = strings.Replace(line, "<timmy-template ", "", -1)
-	line = strings.Replace(line, "></timmy-template>", "", -1)
+	line = strings.Replace(line, "<konstrui-template ", "", -1)
+	line = strings.Replace(line, "></konstrui-template>", "", -1)
 	attributes := strings.Split(line, " ")
 	//fmt.Println(attributes)
 	for i := 0; i < len(attributes); i++ {
@@ -90,7 +90,7 @@ func putTemplates(folderPath string, filename string) string {
 	lineCount := 1
 	for scanner.Scan() {
 		currentLine := scanner.Text()
-		if strings.Contains(currentLine, "<timmy-template") && strings.Contains(currentLine, "</timmy-template>") {
+		if strings.Contains(currentLine, "<konstrui-template") && strings.Contains(currentLine, "</konstrui-template>") {
 			templatePath, data := getTemplateParameters(currentLine)
 			fileContent = fileContent + useTemplate(templatePath, data)
 		} else {

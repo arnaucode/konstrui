@@ -1,9 +1,9 @@
-# Timmy [![Go Report Card](https://goreportcard.com/badge/github.com/arnaucode/timmy)](https://goreportcard.com/report/github.com/arnaucode/timmy)
+# Konstrui [![Go Report Card](https://goreportcard.com/badge/github.com/arnaucode/konstrui)](https://goreportcard.com/report/github.com/arnaucode/konstrui)
 
 web templating engine for static websites, written in Go lang
 
 
-![timmy](https://raw.githubusercontent.com/arnaucode/timmy/master/timmy.png "timmy")
+![konstrui](https://raw.githubusercontent.com/arnaucode/konstrui/master/konstrui.png "konstrui")
 
 
 ## Example
@@ -12,6 +12,7 @@ web templating engine for static websites, written in Go lang
 
 ```
 webInput/
+    konstruiConfig.json
     index.html
     templates/
         userTemplate.html
@@ -29,7 +30,7 @@ webInput/
 
 <p>My first paragraph.</p>
 
-<timmy-template html="templates/userTemplate.html" data="templates/userTemplate.json"></timmy-template>
+<konstrui-template html="templates/userTemplate.html" data="templates/userTemplate.json"></konstrui-template>
 
 </body>
 </html>
@@ -68,7 +69,7 @@ webInput/
 ]
 ```
 
-- Set the configuration file timmyConfig.json in the webInput directory:
+- Set the configuration file konstruiConfig.json in the webInput directory:
 
 ```json
 {
@@ -85,10 +86,10 @@ webInput/
 ```
 
 
-- Execute Timmy
+- Execute konstrui
 
 ```
-./timmy
+./konstrui
 ```
 
 - Output:
