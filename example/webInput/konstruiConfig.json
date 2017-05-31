@@ -1,0 +1,15 @@
+{
+    "title": "Prova web",
+    "author": "arnaucode",
+    "github": "github.com/arnaucode",
+    "website": "arnaucode.com",
+    "files": [
+        "index.html",
+        "projects.html",
+        "app.css"
+    ],
+    "repeatPages": [{
+        "htmlPage": "projectPage.html",
+        "data": "templates/projectTemplate.json"
+    }]
+}

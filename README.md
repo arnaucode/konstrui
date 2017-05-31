@@ -8,6 +8,9 @@ web templating engine for static websites, written in Go lang
 
 ## Example
 
+#### See the full example on https://github.com/arnaucode/konstrui/tree/master/example
+
+
 - Simple project structure example:
 
 ```

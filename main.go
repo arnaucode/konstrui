@@ -20,7 +20,8 @@ func parseDir(folderPath string, newDir string) {
 			fileContent := putTemplates(folderPath, f.Name())
 			writeFile(newDir+"/"+f.Name(), fileContent)
 		} else if extension == "css" {
-			fileContent := readFile(folderPath, f.Name())
+			path := folderPath + "/" + f.Name()
+			fileContent := readFile(path)
 			writeFile(newDir+"/"+f.Name(), fileContent)
 		}
 		if len(fileNameSplitted) == 1 {
@@ -42,8 +43,20 @@ func startTemplating(folderPath string, newDir string) {
 			fileContent := putTemplates(folderPath, fName)
 			writeFile(newDir+"/"+fName, fileContent)
 		} else if extension == "css" {
-			fileContent := readFile(folderPath, fName)
+			path := folderPath + "/" + fName
+			fileContent := readFile(path)
 			writeFile(newDir+"/"+fName, fileContent)
+		}
+	}
+
+	c.Cyan("starting to generate Pages to repeat")
+	for i := 0; i < len(konstruiConfig.RepeatPages); i++ {
+		pageTemplate, data := getHtmlAndDataFromRepeatPages(konstruiConfig.RepeatPages[i])
+		for j := 0; j < len(data); j++ {
+			fmt.Println(j)
+			generatedPage := generatePageFromTemplateAndData(pageTemplate, data[j])
+			fmt.Println(data[j])
+			writeFile(newDir+"/"+data[j]["pageName"]+"Page.html", generatedPage)
 		}
 	}
 }

@@ -12,8 +12,8 @@ import (
 //dataEntry is the map used to create the array of maps, where the templatejson data is stored
 type dataEntry map[string]string
 
-func readFile(folderPath string, filename string) string {
-	dat, err := ioutil.ReadFile(folderPath + "/" + filename)
+func readFile(path string) string {
+	dat, err := ioutil.ReadFile(path)
 	check(err)
 	return string(dat)
 }
@@ -78,7 +78,8 @@ func getTemplateParameters(line string) (string, string) {
 }
 
 func useTemplate(templatePath string, dataPath string) string {
-	templateContent := readFile(rawFolderPath, templatePath)
+	filepath := rawFolderPath + "/" + templatePath
+	templateContent := readFile(filepath)
 	entries := getDataFromJson(rawFolderPath + "/" + dataPath)
 	generated := generateFromTemplateAndData(templateContent, entries)
 	return generated
@@ -106,4 +107,24 @@ func putTemplates(folderPath string, filename string) string {
 func writeFile(path string, newContent string) {
 	err := ioutil.WriteFile(path, []byte(newContent), 0644)
 	check(err)
+}
+
+func generatePageFromTemplateAndData(templateContent string, entry dataEntry) string {
+	var entryContent string
+	entryContent = templateContent
+	//first, get the map keys
+	var keys []string
+	for key, _ := range entry {
+		keys = append(keys, key)
+	}
+	//now, replace the keys with the values
+	for j := 0; j < len(keys); j++ {
+		entryContent = strings.Replace(entryContent, "{{"+keys[j]+"}}", entry[keys[j]], -1)
+	}
+	return entryContent
+}
+func getHtmlAndDataFromRepeatPages(page RepeatPages) (string, []dataEntry) {
+	templateContent := readFile(rawFolderPath + "/" + page.HtmlPage)
+	data := getDataFromJson(rawFolderPath + "/" + page.Data)
+	return templateContent, data
 }

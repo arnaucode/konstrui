@@ -1,0 +1,16 @@
+[{
+        "username": "Michaela Doe",
+        "description": "Hi, I'm here to code",
+        "phone": "456456456"
+    },
+    {
+        "username": "John Doe",
+        "description": "Hi, I'm here",
+        "phone": "123456789"
+    },
+    {
+        "username": "Myself",
+        "description": "How are you",
+        "phone": "no phone"
+    }
+]

@@ -1,0 +1,59 @@
+.collection{
+    border: 0!important;
+}
+.collection-item{
+    background-color: rgba(0,0,0,0)!important;
+    border: 0px!important;
+}
+.collection-item:hover{
+    background-color: rgba(255,255,255,0.1)!important;
+}
+
+
+/* login */
+.o_loginBackground{
+    position: absolute;
+
+    height: 100%!important;
+    width: 100%;
+    min-height: auto;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    background-position: center;
+    background-image: url('img/loginBackground.jpg');
+    text-align: center;
+    /*color: white;*/
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    color: #ffffff;
+
+}
+@font-face {
+    font-family: 'Otterly Adorable';
+    src: url('fonts/fourHand_TRIAL.ttf');
+}
+.o_loginBackground h1{
+    color: #ffffff!important;
+    margin: 10px;
+    font-family: 'Otterly Adorable'
+    /*font-weight: bold;*/
+}
+
+.o_floatRight{
+    float: right;
+}
+.o_textRight{
+    text-align: right;
+}
+.o_badge{
+    border-radius: 8px;
+    margin: 5px;
+    padding: 2px 5px;
+}
