@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -50,6 +51,7 @@ func generateFromTemplateAndData(templateContent string, entries []dataEntry) st
 		//now, replace the keys with the values
 		for j := 0; j < len(keys); j++ {
 			entryContent = strings.Replace(entryContent, "{{"+keys[j]+"}}", entries[i][keys[j]], -1)
+			entryContent = strings.Replace(entryContent, "[[i]]", strconv.Itoa(i), -1)
 		}
 
 		newContent = newContent + entryContent

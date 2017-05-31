@@ -3,7 +3,7 @@
 web templating engine for static websites, written in Go lang
 
 
-![konstrui](https://raw.githubusercontent.com/arnaucode/konstrui/master/konstrui.png "konstrui")
+![konstrui](https://raw.githubusercontent.com/arnaucode/konstrui/master/media/konstrui.png "konstrui")
 
 
 ## Example
@@ -41,9 +41,9 @@ webInput/
 - Set the template file:
 
 ```html
-<div class="class1">
-    <div class="class2">{{username}}</div>
-    <div class="class2">{{description}}</div>
+<div class="class1" id="user[[i]]">
+    <div id="username[[i]]" class="class2">{{username}}</div>
+    <div id="description[[i]]" class="class2">{{description}}</div>
     <div class="class2">{{phone}}</div>
 </div>
 ```
@@ -99,21 +99,21 @@ webInput/
 <html>
 
 <body>
-    <h1>My First Heading</h1>
-    <p>My first paragraph.</p>
-    <div class="class1">
-        <div class="class2">Michaela Doe</div>
-        <div class="class2">Hi, I'm here to code</div>
+    <h1>Heading</h1>
+    <p>Paragraph.</p>
+    <div class="class1" id="user0">
+        <div id="username0" class="class2">Michaela Doe</div>
+        <div id="description0" class="class2">Hi, I'm here to code</div>
         <div class="class2">456456456</div>
     </div>
-    <div class="class1">
-        <div class="class2">John Doe</div>
-        <div class="class2">Hi, I'm here</div>
+    <div class="class1" id="user1">
+        <div id="username1" class="class2">John Doe</div>
+        <div id="description1" class="class2">Hi, I'm here</div>
         <div class="class2">123456789</div>
     </div>
-    <div class="class1">
-        <div class="class2">Myself</div>
-        <div class="class2">How are you</div>
+    <div class="class1" id="user2">
+        <div id="username2" class="class2">Myself</div>
+        <div id="description2" class="class2">How are you</div>
         <div class="class2">no phone</div>
     </div>
 </body>
