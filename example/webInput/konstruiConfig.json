@@ -5,11 +5,14 @@
     "website": "arnaucode.com",
     "files": [
         "index.html",
-        "projects.html",
-        "app.css"
+        "projects.html"
     ],
     "repeatPages": [{
         "htmlPage": "projectPage.html",
         "data": "templates/projectTemplate.json"
-    }]
+    }],
+    "copyRaw": [
+        "css",
+        "js"
+    ]
 }

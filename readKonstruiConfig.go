@@ -20,6 +20,7 @@ type KonstruiConfig struct {
 	Website     string   `json:"website"`
 	Files       []string `json:"files"`
 	RepeatPages []RepeatPages
+	CopyRaw     []string `json:"copyRaw"`
 }
 
 var konstruiConfig KonstruiConfig
