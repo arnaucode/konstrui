@@ -123,3 +123,29 @@ webInput/
 
 </html>
 ```
+
+
+
+## Features
+
+Import templates
+```html
+<konstrui-template html="template.html" data="template.json"></konstrui-template>
+```
+
+Load values:
+```html
+{{username}}
+```
+
+Number of iterations:
+```html
+User [[i]]
+```
+
+Subobjects:
+```html
+<p konstrui-repeat="users">
+    {{user.username}}
+</p>
+```

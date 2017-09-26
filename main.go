@@ -25,7 +25,7 @@ func parseDir(folderPath string, newDir string) {
 			writeFile(newDir+"/"+f.Name(), fileContent)
 		}
 		if len(fileNameSplitted) == 1 {
-			newDir := newDir + "/" + f.Name()
+			newDir = newDir + "/" + f.Name()
 			oldDir := rawFolderPath + "/" + f.Name()
 			if _, err := os.Stat(newDir); os.IsNotExist(err) {
 				_ = os.Mkdir(newDir, 0700)
@@ -36,6 +36,7 @@ func parseDir(folderPath string, newDir string) {
 }
 func startTemplating(folderPath string, newDir string) {
 	//do templating for each file in konstruiConfig.Files in konstruiConfig.Files
+	//konstrui-template
 	for i := 0; i < len(konstruiConfig.Files); i++ {
 		fName := konstruiConfig.Files[i]
 		fileNameSplitted := strings.Split(fName, ".")
@@ -55,9 +56,11 @@ func startTemplating(folderPath string, newDir string) {
 	for i := 0; i < len(konstruiConfig.RepeatPages); i++ {
 		pageTemplate, data := getHtmlAndDataFromRepeatPages(konstruiConfig.RepeatPages[i])
 		for j := 0; j < len(data); j++ {
-			fmt.Println(j)
-			generatedPage := generatePageFromTemplateAndData(pageTemplate, data[j])
-			fmt.Println(data[j])
+			//fmt.Println(j)
+			var dataArray []dataEntry
+			dataArray = append(dataArray, data[j])
+			generatedPage := putDataInTemplate(pageTemplate, dataArray)
+			//fmt.Println(data[j])
 			writeFile(newDir+"/"+data[j]["pageName"]+"Page.html", generatedPage)
 		}
 	}
@@ -94,7 +97,7 @@ func copyDirRaw(fromDir string, currentDir string, newDir string) {
 	}
 }
 func copyFileRaw(fromDir string, fName string, newDir string) {
-	c.Yellow("copying raw " + fromDir + "//" + fName)
+	c.Yellow("copying raw " + fromDir + "/" + fName)
 	fileContent := readFile(fromDir + "/" + fName)
 	writeFile(newDir+"/"+fName, fileContent)
 }
@@ -107,6 +110,9 @@ func main() {
 	fmt.Println(konstruiConfig.Files)
 	c.Green("templating")
 	//parseDir(rawFolderPath, newFolderPath)
+
+	//create directory webOutput
+	_ = os.Mkdir("webOutput", os.ModePerm)
 
 	startTemplating(rawFolderPath, newFolderPath)
 	c.Green("webpage finished, files at /webOutput")
