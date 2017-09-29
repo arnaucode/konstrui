@@ -11,7 +11,7 @@ const rawFolderPath = "./webInput"
 const newFolderPath = "./webOutput"
 const konstruiConfigFile = "konstruiConfig.json"
 
-func parseDir(folderPath string, newDir string) {
+/*func parseDir(folderPath string, newDir string) {
 	files, _ := ioutil.ReadDir(folderPath)
 	for _, f := range files {
 		fileNameSplitted := strings.Split(f.Name(), ".")
@@ -33,24 +33,21 @@ func parseDir(folderPath string, newDir string) {
 			parseDir(oldDir, newDir)
 		}
 	}
-}
+}*/
 func startTemplating(folderPath string, newDir string) {
+	//FILES
 	//do templating for each file in konstruiConfig.Files in konstruiConfig.Files
 	//konstrui-template
 	for i := 0; i < len(konstruiConfig.Files); i++ {
 		fName := konstruiConfig.Files[i]
-		fileNameSplitted := strings.Split(fName, ".")
-		extension := fileNameSplitted[len(fileNameSplitted)-1]
-		if extension == "html" {
-			fileContent := putTemplates(folderPath, fName)
-			writeFile(newDir+"/"+fName, fileContent)
-		} else if extension == "css" {
-			path := folderPath + "/" + fName
-			fileContent := readFile(path)
-			writeFile(newDir+"/"+fName, fileContent)
-		}
+		//fileNameSplitted := strings.Split(fName, ".")
+		//extension := fileNameSplitted[len(fileNameSplitted)-1]
+		fileContent := putTemplates(folderPath, fName)
+		/*fmt.Println(i)
+		color.Red(fileContent)*/
+		writeFile(newDir+"/"+fName, fileContent)
 	}
-
+	//REPEATPAGES
 	//do templating for the file pages in konstruiConfig.RepeatPages
 	c.Cyan("starting to generate Pages to repeat")
 	for i := 0; i < len(konstruiConfig.RepeatPages); i++ {
@@ -64,7 +61,7 @@ func startTemplating(folderPath string, newDir string) {
 			writeFile(newDir+"/"+data[j]["pageName"]+"Page.html", generatedPage)
 		}
 	}
-
+	//COPYRAW
 	//copy the konstruiConfig.CopyRaw files without modificate them
 	for i := 0; i < len(konstruiConfig.CopyRaw); i++ {
 		fName := konstruiConfig.CopyRaw[i]
@@ -107,7 +104,7 @@ func main() {
 	//first reads the konstrui.Config.json
 	readKonstruiConfig(rawFolderPath + "/" + konstruiConfigFile)
 	c.Green("configuration:")
-	fmt.Println(konstruiConfig.Files)
+	fmt.Println(konstruiConfig)
 	c.Green("templating")
 	//parseDir(rawFolderPath, newFolderPath)
 
