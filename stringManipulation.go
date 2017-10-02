@@ -9,6 +9,14 @@ func getLines(text string) []string {
 	return lines
 }
 
+func concatStringsWithJumps(lines []string) string {
+	var r string
+	for _, l := range lines {
+		r = r + l + "\n"
+	}
+	return r
+}
+
 func locateStringInArray(lines []string, s string) []int {
 	var positions []int
 
@@ -47,12 +55,4 @@ func addElementsToArrayPosition(lines []string, newLines []string, pos int) []st
 		result = append(result, lines[pos:]...)
 	*/
 	return result
-}
-
-func concatStringsWithJumps(lines []string) string {
-	var r string
-	for _, l := range lines {
-		r = r + l + "\n"
-	}
-	return r
 }
