@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/Jeffail/gabs"
 	"github.com/fatih/color"
 )
 
@@ -42,7 +43,7 @@ func readFile(path string) string {
 	return string(dat)
 }
 
-func getDataFromJson(path string) []dataEntry {
+func getDataFromJson(path string) ([]dataEntry, *gabs.Container) {
 	var entries []dataEntry
 	file, err := ioutil.ReadFile(path)
 	check(err)
@@ -57,7 +58,17 @@ func getDataFromJson(path string) []dataEntry {
 		entries = append(entries, newDataEntry)
 	}
 
-	return entries
+	jsonData := jsonGabs(path)
+	return entries, jsonData
+}
+
+func jsonGabs(path string) *gabs.Container {
+	file, err := ioutil.ReadFile(path)
+	check(err)
+	jsonParsed, err := gabs.ParseJSON(file)
+	img := "img"
+	fmt.Println(jsonParsed.S(img))
+	return jsonParsed
 }
 
 func writeFile(path string, newContent string) {
@@ -82,8 +93,8 @@ func writeFile(path string, newContent string) {
 	}
 	return entryContent
 }*/
-func getHtmlAndDataFromRepeatPages(page RepeatPages) (string, []dataEntry) {
+func getHtmlAndDataFromRepeatPages(page RepeatPages) (string, []dataEntry, *gabs.Container) {
 	templateContent := readFile(rawFolderPath + "/" + page.HtmlPage)
-	data := getDataFromJson(rawFolderPath + "/" + page.Data)
-	return templateContent, data
+	data, jsonData := getDataFromJson(rawFolderPath + "/" + page.Data)
+	return templateContent, data, jsonData
 }

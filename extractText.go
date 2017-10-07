@@ -96,8 +96,8 @@ func (rtr *ReadTillReader) Read(p []byte) (n int, err error) {
 
 func extractText(original string, init string, fin string) string {
 	contentReader := strings.NewReader(original)
-	str := NewSkipTillReader(contentReader, []byte("<konstrui-repeat"))
-	rtr := NewReadTillReader(str, []byte("</konstrui-repeat>"))
+	str := NewSkipTillReader(contentReader, []byte(init))
+	rtr := NewReadTillReader(str, []byte(fin))
 	bs, err := ioutil.ReadAll(rtr)
 	check(err)
 	return string(bs)
