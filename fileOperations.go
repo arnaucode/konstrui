@@ -66,8 +66,8 @@ func jsonGabs(path string) *gabs.Container {
 	file, err := ioutil.ReadFile(path)
 	check(err)
 	jsonParsed, err := gabs.ParseJSON(file)
-	img := "img"
-	fmt.Println(jsonParsed.S(img))
+	//img := "img"
+	//fmt.Println(jsonParsed.S(img))
 	return jsonParsed
 }
 
