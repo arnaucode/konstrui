@@ -41,29 +41,21 @@ func replaceEntryOLD(templateContent string, entry dataEntry, jsonData *gabs.Con
 func replaceEntry(templateContent string, entry dataEntry, jsonData *gabs.Container, elemName string) string {
 	fmt.Println(jsonData)
 	children, _ := jsonData.S().ChildrenMap()
-	_, ok := jsonData.S().Children()
+	//_, ok := jsonData.S().Children()
 	color.Green("AAAAAAAAAA")
-	fmt.Println(children)
-	fmt.Println(ok)
-	fmt.Println("-")
 	for parameter, child := range children {
-		subchildren, _ := child.S().ChildrenMap()
+		//subchildren, _ := child.S().ChildrenMap()
 		_, ok := child.S().Children()
-		fmt.Println(parameter)
-		fmt.Println(child)
-		fmt.Println(ok)
 		if ok != nil {
-			color.Green("child fin")
 			color.Blue(child.Data().(string))
-			fmt.Println(child)
 			templateContent = strings.Replace(templateContent, "{{"+parameter+"}}", child.Data().(string), -1)
 		} else {
-			for subparameter, subchild := range subchildren {
+			/*for subparameter, subchild := range subchildren {
 				color.Red(subchild.Data().(string))
 				fmt.Println(subchild)
 				fmt.Println(subparameter)
 				//templateContent = strings.Replace(templateContent, "{{"+subparameter+"}}", subchild.Data().(string), -1)
-			}
+			}*/
 		}
 
 	}
@@ -125,9 +117,19 @@ func getElemFromObj(entry dataEntry, elemName string) []dataEntry {
 }
 func konstruiSimpleVars(template string, entries []dataEntry, jsonData *gabs.Container) string {
 	//now, replace simple templating variables {{vars}}
-	for _, entry := range entries {
+	/*for _, entry := range entries {
 		template = replaceEntry(template, entry, jsonData, "")
+	}*/
+	/*children, _ := jsonData.S().Children()
+	for _, child := range children {
+		var entry dataEntry
+		fmt.Println("aaaaa")
+		fmt.Println(child)
+		template = replaceEntry(template, entry, child, "")
 	}
+	*/
+	var entry dataEntry
+	template = replaceEntry(template, entry, jsonData, "")
 	return template
 }
 func konstruiTemplate(templateContent string) string {
@@ -186,14 +188,19 @@ func startTemplating(folderPath string, newDir string) {
 	//do templating for the file pages in konstruiConfig.RepeatPages
 	c.Cyan("starting to generate Pages to repeat")
 	for i := 0; i < len(konstruiConfig.RepeatPages); i++ {
-		pageTemplate, data, jsonData := getHtmlAndDataFromRepeatPages(konstruiConfig.RepeatPages[i])
-		for j := 0; j < len(data); j++ {
+		pageTemplate, _, jsonData := getHtmlAndDataFromRepeatPages(konstruiConfig.RepeatPages[i])
+		//for j := 0; j < len(data); j++ {
+		children, _ := jsonData.S().Children()
+		for _, child := range children {
 			var dataArray []dataEntry
-			dataArray = append(dataArray, data[j])
-			generatedPage := konstruiRepeatJSONPartTwo(pageTemplate, dataArray, jsonData, "")
-			generatedPage = konstruiRepeatElem(generatedPage, dataArray[0], jsonData)
-			generatedPage = konstruiSimpleVars(generatedPage, dataArray, jsonData)
-			writeFile(newDir+"/"+data[j]["pageName"]+"Page.html", generatedPage)
+			var dat dataEntry
+			//dataArray = append(dataArray, data[j])
+			generatedPage := konstruiRepeatJSONPartTwo(pageTemplate, dataArray, child, "")
+			generatedPage = konstruiRepeatElem(generatedPage, dat, child)
+			generatedPage = konstruiSimpleVars(generatedPage, dataArray, child)
+			//writeFile(newDir+"/"+data[j]["pageName"]+"Page.html", generatedPage)
+			pageName, _ := child.Path("pageName").Data().(string)
+			writeFile(newDir+"/"+pageName+"Page.html", generatedPage)
 		}
 	}
 	//COPYRAW
