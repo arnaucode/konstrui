@@ -99,22 +99,14 @@ func konstruiRepeatJSON(templateContent string) string {
 func konstruiRepeatElem(templateContent string, entry dataEntry, jsonData *gabs.Container) string {
 	if strings.Contains(templateContent, "<konstrui-repeatElem") {
 		elemName, _ := getTagParameters(templateContent, "konstrui-repeatElem", "repeatElem", "nil")
-		//elemEntries := getElemFromObj(entry, elemName)
-		//templateContent = konstruiRepeatJSONPartTwo(templateContent, elemEntries, jsonData, elemName)
 		extracted := extractText(templateContent, "<konstrui-repeatElem", "</konstrui-repeatElem>")
-		children, _ := jsonData.S(elemName).Children()
-		/*for _, child := range children {
-			//var entry dataEntry
-			fmt.Println(child)
-			//replaced = replaced + replaceEntry(extracted, entry, child, elemName)
-			replaced = replaced + extracted
-		}*/
 		fragmentLines := getLines(extracted)
 		fragmentLines = deleteArrayElementsWithString(fragmentLines, "konstrui-repeatElem")
 		f := concatStringsWithJumps(fragmentLines)
-
+		children, _ := jsonData.S(elemName).Children()
 		var replaced string
 		for _, child := range children {
+			fmt.Println(child.Data().(string))
 			replacedElem := strings.Replace(f, "{{"+elemName+"}}", child.Data().(string), -1)
 			replaced = replaced + replacedElem
 		}
@@ -130,12 +122,6 @@ func konstruiRepeatElem(templateContent string, entry dataEntry, jsonData *gabs.
 	return templateContent
 }
 
-/*func getElemFromObj(entry dataEntry, elemName string) []dataEntry {
-	var elemEntries []dataEntry
-	fmt.Println(elemName)
-	fmt.Println(entry)
-	return elemEntries
-}*/
 func konstruiSimpleVars(template string, entries []dataEntry, jsonData *gabs.Container) string {
 	//now, replace simple templating variables {{vars}}
 	/*for _, entry := range entries {
@@ -152,6 +138,36 @@ func konstruiSimpleVars(template string, entries []dataEntry, jsonData *gabs.Con
 	var entry dataEntry
 	template = replaceEntry(template, entry, jsonData, "")
 	return template
+}
+func konstruiInclude(content string) string {
+	var result string
+	if strings.Contains(content, "<konstrui-include") {
+		lines := getLines(content)
+		for _, line := range lines {
+			if strings.Contains(line, "<konstrui-include") {
+				dataPath, _ := getTagParameters(line, "<konstrui-include", "html", "nil")
+				dataPath = strings.Replace(dataPath, "\n", "", -1)
+				htmlInclude := readFile(rawFolderPath + "/" + dataPath)
+				result = result + htmlInclude
+			} else {
+				result = result + line + "\n"
+			}
+		}
+
+		/*dataPath, _ := getTagParameters(content, "<konstrui-include", "html", "nil")
+		dataPath = strings.Replace(dataPath, "\n", "", -1)
+		htmlInclude := readFile(rawFolderPath + "/" + dataPath)
+		htmlIncludeLines := getLines(htmlInclude)
+		contentLines := getLines(content)
+		p := locateStringInArray(contentLines, "<konstrui-include")
+		fmt.Println(p)
+		contentLines = deleteLinesBetween(contentLines, p[0], p[0])
+		contentLines = addElementsToArrayPosition(contentLines, htmlIncludeLines, p[0])
+		content = concatStringsWithJumps(contentLines)*/
+	} else {
+		result = content
+	}
+	return result
 }
 func konstruiTemplate(templateContent string) string {
 	var result string
@@ -203,6 +219,7 @@ func startTemplating(folderPath string, newDir string) {
 		fileContent := readFile(folderPath + "/" + fName)
 		fileContent = konstruiTemplate(fileContent)
 		generatedPage := konstruiRepeatJSON(fileContent)
+		generatedPage = konstruiInclude(generatedPage)
 		writeFile(newDir+"/"+fName, generatedPage)
 	}
 	//REPEATPAGES
@@ -219,6 +236,7 @@ func startTemplating(folderPath string, newDir string) {
 			generatedPage := konstruiRepeatJSONPartTwo(pageTemplate, dataArray, child, "")
 			generatedPage = konstruiRepeatElem(generatedPage, dat, child)
 			generatedPage = konstruiSimpleVars(generatedPage, dataArray, child)
+			generatedPage = konstruiInclude(generatedPage)
 			//writeFile(newDir+"/"+data[j]["pageName"]+"Page.html", generatedPage)
 			pageName, _ := child.Path("pageName").Data().(string)
 			writeFile(newDir+"/"+pageName+"Page.html", generatedPage)
