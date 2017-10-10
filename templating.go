@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/Jeffail/gabs"
@@ -15,7 +13,8 @@ func duplicateText(original string, count int) string {
 	}
 	return result
 }
-func replaceEntryOLD(templateContent string, entry dataEntry, jsonData *gabs.Container, elemName string) string {
+
+/*func replaceEntryOLD(templateContent string, entry dataEntry, jsonData *gabs.Container, elemName string) string {
 	//replace {{}} with data
 	var keys []string
 	for key, _ := range entry {
@@ -36,7 +35,7 @@ func replaceEntryOLD(templateContent string, entry dataEntry, jsonData *gabs.Con
 	}
 
 	return templateContent
-}
+}*/
 func replaceEntry(templateContent string, entry dataEntry, jsonData *gabs.Container, elemName string) string {
 	//fmt.Println(jsonData)
 	children, _ := jsonData.S().ChildrenMap()
@@ -106,7 +105,7 @@ func konstruiRepeatElem(templateContent string, entry dataEntry, jsonData *gabs.
 		children, _ := jsonData.S(elemName).Children()
 		var replaced string
 		for _, child := range children {
-			fmt.Println(child.Data().(string))
+			//fmt.Println(child.Data().(string))
 			replacedElem := strings.Replace(f, "{{"+elemName+"}}", child.Data().(string), -1)
 			replaced = replaced + replacedElem
 		}

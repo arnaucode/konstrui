@@ -76,7 +76,7 @@ func writeFile(path string, newContent string) {
 	check(err)
 
 	color.Green(path + ":")
-	color.Blue(newContent)
+	//color.Blue(newContent)
 }
 
 /*func generatePageFromTemplateAndData(templateContent string, entry dataEntry) string {
