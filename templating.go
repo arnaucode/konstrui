@@ -88,8 +88,10 @@ func konstruiRepeatJSONPartTwo(templateContent string, entries []dataEntry, json
 	return templateContent
 }
 func konstruiRepeatJSON(templateContent string) string {
-	if strings.Contains(templateContent, "<konstrui-repeatJSON") {
-		dataPath, _ := getTagParameters(templateContent, "konstrui-repeatJSON", "repeatJSON", "nil")
+	for strings.Contains(templateContent, "<konstrui-repeatJSON") {
+		tlines := getLines(templateContent)
+		tp := locateStringInArray(tlines, "konstrui-repeatJSON")
+		dataPath, _ := getTagParameters(tlines[tp[0]], "konstrui-repeatJSON", "repeatJSON", "nil")
 		dataPath = strings.Replace(dataPath, "\n", "", -1)
 		entries, jsonData := getDataFromJson(rawFolderPath + "/" + dataPath)
 		templateContent = konstruiRepeatJSONPartTwo(templateContent, entries, jsonData, "")
