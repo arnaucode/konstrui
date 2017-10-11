@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/Jeffail/gabs"
@@ -96,8 +97,11 @@ func konstruiRepeatJSON(templateContent string) string {
 	return templateContent
 }
 func konstruiRepeatElem(templateContent string, entry dataEntry, jsonData *gabs.Container) string {
-	if strings.Contains(templateContent, "<konstrui-repeatElem") {
-		elemName, _ := getTagParameters(templateContent, "konstrui-repeatElem", "repeatElem", "nil")
+	for strings.Contains(templateContent, "<konstrui-repeatElem") {
+		tlines := getLines(templateContent)
+		tp := locateStringInArray(tlines, "konstrui-repeatElem")
+		elemName, _ := getTagParameters(tlines[tp[0]], "konstrui-repeatElem", "repeatElem", "nil")
+
 		extracted := extractText(templateContent, "<konstrui-repeatElem", "</konstrui-repeatElem>")
 		fragmentLines := getLines(extracted)
 		fragmentLines = deleteArrayElementsWithString(fragmentLines, "konstrui-repeatElem")
@@ -105,18 +109,19 @@ func konstruiRepeatElem(templateContent string, entry dataEntry, jsonData *gabs.
 		children, _ := jsonData.S(elemName).Children()
 		var replaced string
 		for _, child := range children {
-			//fmt.Println(child.Data().(string))
+			fmt.Println(child)
+			fmt.Println(child.Data().(string))
 			replacedElem := strings.Replace(f, "{{"+elemName+"}}", child.Data().(string), -1)
 			replaced = replaced + replacedElem
 		}
 		fragmentLines = getLines(replaced)
+		fmt.Println(replaced)
 
-		lines := getLines(templateContent)
-		p := locateStringInArray(lines, "konstrui-repeatElem")
-		lines = deleteLinesBetween(lines, p[0], p[1])
-		lines = addElementsToArrayPosition(lines, fragmentLines, p[0])
-		templateContent = concatStringsWithJumps(lines)
-
+		/*lines := getLines(templateContent)
+		p := locateStringInArray(lines, "konstrui-repeatElem")*/
+		tlines = deleteLinesBetween(tlines, tp[0], tp[1])
+		tlines = addElementsToArrayPosition(tlines, fragmentLines, tp[0])
+		templateContent = concatStringsWithJumps(tlines)
 	}
 	return templateContent
 }
