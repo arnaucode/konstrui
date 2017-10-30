@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/Jeffail/gabs"
@@ -37,6 +36,10 @@ func duplicateText(original string, count int) string {
 
 	return templateContent
 }*/
+func replaceVariable(templateContent string, variable string, value string) string {
+	templateContent = strings.Replace(templateContent, "{{"+variable+"}}", value, -1)
+	return templateContent
+}
 func replaceEntry(templateContent string, entry dataEntry, jsonData *gabs.Container, elemName string) string {
 	//fmt.Println(jsonData)
 	children, _ := jsonData.S().ChildrenMap()
@@ -55,6 +58,32 @@ func replaceEntry(templateContent string, entry dataEntry, jsonData *gabs.Contai
 			}*/
 		}
 
+	}
+	return templateContent
+}
+func konstruiRepeatArray(templateContent string) string {
+	for strings.Contains(templateContent, "<konstrui-repeatArray") {
+		tlines := getLines(templateContent)
+		tp := locateStringInArray(tlines, "konstrui-repeatArray")
+		dataPath, _ := getTagParameters(tlines[tp[0]], "konstrui-repeatArray", "repeatArray", "nil")
+		dataPath = strings.Replace(dataPath, "\n", "", -1)
+		_, jsonData := getDataFromJson(rawFolderPath + "/" + dataPath)
+		//get the part of the html where is the konstrui-repeatArray
+		extracted := extractText(templateContent, "<konstrui-repeatArray", "</konstrui-repeatArray>")
+		var replaced string
+		children, _ := jsonData.S().Children()
+		for _, child := range children {
+			replaced = replaced + replaceVariable(extracted, "var", child.Data().(string))
+		}
+
+		fragmentLines := getLines(replaced)
+		fragmentLines = deleteArrayElementsWithString(fragmentLines, "konstrui-repeatArray")
+		//afegir fragment al newContent, substituint el fragment original
+		lines := getLines(templateContent)
+		p := locateStringInArray(lines, "konstrui-repeatArray")
+		lines = deleteLinesBetween(lines, p[0], p[1])
+		lines = addElementsToArrayPosition(lines, fragmentLines, p[0])
+		templateContent = concatStringsWithJumps(lines)
 	}
 	return templateContent
 }
@@ -111,13 +140,13 @@ func konstruiRepeatElem(templateContent string, entry dataEntry, jsonData *gabs.
 		children, _ := jsonData.S(elemName).Children()
 		var replaced string
 		for _, child := range children {
-			fmt.Println(child)
-			fmt.Println(child.Data().(string))
+			//fmt.Println(child)
+			//fmt.Println(child.Data().(string))
 			replacedElem := strings.Replace(f, "{{"+elemName+"}}", child.Data().(string), -1)
 			replaced = replaced + replacedElem
 		}
 		fragmentLines = getLines(replaced)
-		fmt.Println(replaced)
+		//fmt.Println(replaced)
 
 		/*lines := getLines(templateContent)
 		p := locateStringInArray(lines, "konstrui-repeatElem")*/
@@ -226,6 +255,7 @@ func startTemplating(folderPath string, newDir string) {
 		fileContent = konstruiTemplate(fileContent)
 		generatedPage := konstruiRepeatJSON(fileContent)
 		generatedPage = konstruiInclude(generatedPage)
+		generatedPage = konstruiRepeatArray(generatedPage)
 		writeFile(newDir+"/"+fName, generatedPage)
 	}
 	//REPEATPAGES
