@@ -18,18 +18,22 @@ type KonstruiConfig struct {
 	Author      string   `json:"author"`
 	Github      string   `json:"github"`
 	Website     string   `json:"website"`
+	OutputDir   string   `json:"outputDir"`
+	LangPrefix  string   `json:"langPrefix"`
 	Files       []string `json:"files"`
 	RepeatPages []RepeatPages
 	CopyRaw     []string `json:"copyRaw"`
 }
 
-var konstruiConfig KonstruiConfig
+func readKonstruiConfig(path string) []KonstruiConfig {
+	var konstruiConfigs []KonstruiConfig
 
-func readKonstruiConfig(path string) {
 	file, e := ioutil.ReadFile(path)
 	if e != nil {
 		fmt.Println("error:", e)
 	}
 	content := string(file)
-	json.Unmarshal([]byte(content), &konstruiConfig)
+	json.Unmarshal([]byte(content), &konstruiConfigs)
+
+	return konstruiConfigs
 }

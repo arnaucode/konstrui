@@ -245,7 +245,7 @@ func getTagParameters(line string, tagname string, param1 string, param2 string)
 	return param1content, param2content
 }
 
-func startTemplating(folderPath string, newDir string) {
+func startTemplating(folderPath string, newDir string, konstruiConfig KonstruiConfig) {
 	//FILES
 	//do templating for each file in konstruiConfig.Files
 	//konstrui-template

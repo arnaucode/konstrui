@@ -6,7 +6,6 @@ import (
 )
 
 const rawFolderPath = "./webInput"
-const newFolderPath = "./webOutput"
 const konstruiConfigFile = "konstruiConfig.json"
 
 func main() {
@@ -14,15 +13,18 @@ func main() {
 	c.Green("getting conifg from file konstruiConfig.json")
 
 	//READ CONFIG: konstruiConfig.json
-	readKonstruiConfig(rawFolderPath + "/" + konstruiConfigFile)
+	konstruiConfigs := readKonstruiConfig(rawFolderPath + "/" + konstruiConfigFile)
 	c.Green("configuration:")
-	fmt.Println(konstruiConfig)
+	fmt.Println(konstruiConfigs)
 	c.Green("templating")
 
 	//create directory webOutput
 	_ = os.Mkdir("webOutput", os.ModePerm)
 
 	//DO TEMPLATING
-	startTemplating(rawFolderPath, newFolderPath)
+	for _, konstruiConfig := range konstruiConfigs {
+		_ = os.Mkdir(konstruiConfig.OutputDir, os.ModePerm)
+		startTemplating(rawFolderPath, konstruiConfig.OutputDir, konstruiConfig)
+	}
 	c.Green("webpage finished, files at /webOutput")
 }
